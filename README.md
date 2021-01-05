@@ -70,4 +70,40 @@ Sample C# console app showing basics of using configuration, including appsettin
 			                "ASPNETCORE_ENVIRONMENT": "QA",
 			                "DOTNET_ENVIRONMENT" : "QA"
 			            }
+	
+	• Step 3
+		○ Support for complex sections
+		○ Add to settings file
+			§ "EmailSettings": {
+			        "EmailTemplatesPath": "EmailTemplates",
+			        "Email": "aa@aa.com"
+			    },
+			§ "WeatherClientConfig": {
+			        "IsEnabled": true,
+			        "WeatherAPIUrl": "https://localhost:12345",
+			        "Timeout": 5000
+			    }
+		○ Add class
+			§ public class WeatherClientConfig
+		        {
+		            public bool IsEnabled { get; set; };
+		            public string WeatherAPIUrl { get; set; }
+		            public string Timeout { get; set; }
+				  
+				  public override string ToString()
+		            {                
+		                return "Is Enabled: " + IsEnabled + ", WeatherAPIUrl: " + WeatherAPIUrl + ", Timeout: " + Timeout;                   }
+		        }
+		○ Add package
+			§ dotnet add package Microsoft.Extensions.Configuration.Binder
+			
+		○ Add code
+			§ var testValue = Configuration["EmailSettings:Email"]; 
+			§ var section = Configuration.GetSection(nameof(WeatherClientConfig)); 
+			§ var weatherClientConfig = section.Get<WeatherClientConfig>();
+			 
+			§  Console.WriteLine($"Setting from complex AppSettings via direct reference: {testValue}");
+			§  Console.WriteLine($"Setting from complex AppSettings via C# class: {weatherClientConfig}");
+			
+
 
